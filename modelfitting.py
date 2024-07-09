@@ -17,9 +17,9 @@ simulations = [f for f in os.listdir(simulations_dir) if f.endswith('_aec.npy')]
 correlation_results = []
 
 # Function to filter out NaN and Inf values from a matrix
-def filter_valid_values(matrix):
-    valid_indices = ~np.isnan(matrix) & ~np.isinf(matrix)
-    return matrix[valid_indices]
+def filter_valid_values(matrix1, matrix2):
+    valid_indices = ~np.isnan(matrix1) & ~np.isinf(matrix1) & ~np.isnan(matrix2) & ~np.isinf(matrix2)
+    return matrix1[valid_indices], matrix2[valid_indices]
 
 # Iterate over all wPLI files and compute correlation with the empirical wPLI matrix
 for simulation in simulations:
@@ -28,18 +28,17 @@ for simulation in simulations:
     # Load the simulated wPLI matrix
     simulated = np.load(file_path)
 
+    # Check if matrices have the same shape
+    if fc_matrix.shape != simulated.shape:
+        print(f"Shape mismatch for {simulation}: {fc_matrix.shape} vs {simulated.shape}")
+        continue
+
     # Filter out NaN and Inf values from both matrices
-    fc_matrix_filtered = filter_valid_values(fc_matrix)
-    simulated_filtered = filter_valid_values(simulated)
+    fc_matrix_filtered, simulated_filtered = filter_valid_values(fc_matrix, simulated)
 
     # Check for empty filtered matrices
     if fc_matrix_filtered.size == 0 or simulated_filtered.size == 0:
         print(f"Filtered matrices are empty for {simulation}")
-        continue
-
-    # Check if filtered matrices have the same shape
-    if fc_matrix_filtered.shape != simulated_filtered.shape:
-        print(f"Shape mismatch for {wpli_file}: {fc_matrix_filtered.shape} vs {simulated_filtered.shape}")
         continue
 
     # Compute the correlation between simulated wPLI and empirical wPLI

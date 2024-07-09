@@ -11,7 +11,7 @@ fc_matrix = np.load('emperical/average_AEC_HCP.npy')
 simulations_dir = 'aec_simulations/'
 
 # Get a list of all wPLI files in the directory
-wpli_files = [f for f in os.listdir(simulations_dir) if f.endswith('_aec.npy')]
+simulations = [f for f in os.listdir(simulations_dir) if f.endswith('_aec.npy')]
 
 # Initialize an array to store correlation results
 correlation_results = []
@@ -22,30 +22,30 @@ def filter_valid_values(matrix):
     return matrix[valid_indices]
 
 # Iterate over all wPLI files and compute correlation with the empirical wPLI matrix
-for wpli_file in wpli_files:
-    file_path = os.path.join(simulations_dir, wpli_file)
+for simulation in simulations:
+    file_path = os.path.join(simulations_dir, simulation)
 
     # Load the simulated wPLI matrix
-    simulated_wpli = np.load(file_path)
+    simulated = np.load(file_path)
 
     # Filter out NaN and Inf values from both matrices
     fc_matrix_filtered = filter_valid_values(fc_matrix)
-    simulated_wpli_filtered = filter_valid_values(simulated_wpli)
+    simulated_filtered = filter_valid_values(simulated)
 
     # Check for empty filtered matrices
-    if fc_matrix_filtered.size == 0 or simulated_wpli_filtered.size == 0:
-        print(f"Filtered matrices are empty for {wpli_file}")
+    if fc_matrix_filtered.size == 0 or simulated_filtered.size == 0:
+        print(f"Filtered matrices are empty for {simulation}")
         continue
 
     # Check if filtered matrices have the same shape
-    if fc_matrix_filtered.shape != simulated_wpli_filtered.shape:
-        print(f"Shape mismatch for {wpli_file}: {fc_matrix_filtered.shape} vs {simulated_wpli_filtered.shape}")
+    if fc_matrix_filtered.shape != simulated_filtered.shape:
+        print(f"Shape mismatch for {wpli_file}: {fc_matrix_filtered.shape} vs {simulated_filtered.shape}")
         continue
 
     # Compute the correlation between simulated wPLI and empirical wPLI
-    correlation_value = np.corrcoef(fc_matrix_filtered, simulated_wpli_filtered)[0, 1]
-    correlation_results.append((wpli_file, correlation_value))
-    print(f"Processed {wpli_file}: Correlation = {correlation_value}")
+    correlation_value = np.corrcoef(fc_matrix_filtered, simulated_filtered)[0, 1]
+    correlation_results.append((simulation, correlation_value))
+    print(f"Processed {simulation}: Correlation = {correlation_value}")
 
 # Check if any files were processed
 if not correlation_results:

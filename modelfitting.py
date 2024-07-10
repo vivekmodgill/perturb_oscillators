@@ -48,7 +48,7 @@ def compute_correlation(empirical_matrix, simulations_dir):
     list: List of tuples containing simulation filenames and their correlation values.
     """
     correlation_results = []
-    simulations = [f for f in os.listdir(simulations_dir) if f.endswith('_aec.npy')]
+    simulations         = [f for f in os.listdir(simulations_dir) if f.endswith('_aec.npy')]
 
     for simulation in simulations:
         file_path = os.path.join(simulations_dir, simulation)
@@ -89,12 +89,12 @@ def main():
         return
 
     # Convert correlation results to a structured array for easy processing
-    dtype = [('filename', 'U100'), ('correlation', float)]
+    dtype               = [('filename', 'U100'), ('correlation', float)]
     correlation_results = np.array(correlation_results, dtype=dtype)
 
     # Find the file with the maximum correlation
     max_corr_index = np.argmax(correlation_results['correlation'])
-    max_corr_file = correlation_results[max_corr_index]['filename']
+    max_corr_file  = correlation_results[max_corr_index]['filename']
     max_corr_value = correlation_results[max_corr_index]['correlation']
 
     # Print the file and correlation value with the highest correlation

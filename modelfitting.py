@@ -73,10 +73,10 @@ def compute_correlation(empirical_matrix, simulations_dir):
 
 def main():
     # Change working directory
-    change_working_directory('/vol/specs04/vivek/perturb_oscillator/')
+    change_working_directory('')
 
     # Load the empirical wPLI matrix
-    empirical_matrix = load_empirical_matrix('emperical/average_AEC_HCP.npy')
+    empirical_matrix = load_empirical_matrix('')
 
     # Directory containing the simulated wPLI matrices
     simulations_dir = 'aec_simulations/'

@@ -6,7 +6,7 @@ import concurrent.futures
 from pymatreader import read_mat
 
 # Change working directory
-os.chdir('/home/vsharma/scripts/wbm/perturb_oscillator/')
+os.chdir('') #Path to main directory
 
 # Load Connectivity Matrices
 mat = read_mat('SC_90aal_32HCP.mat')
